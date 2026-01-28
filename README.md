@@ -1,93 +1,16 @@
-# 🧠⚔️ PokéStrat AI
+# React + Vite
 
-![Status](https://img.shields.io/badge/status-in%20development-yellow)
-![Frontend](https://img.shields.io/badge/frontend-React-blue)
-![Bundler](https://img.shields.io/badge/bundler-Vite-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-green)
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-PokéStrat AI is an intelligent Pokédex and Pokémon battle assistant designed to help players build better teams and make smarter battle decisions.
+Currently, two official plugins are available:
 
-This project goes beyond a traditional Pokédex by combining data analysis, team building, and AI-powered strategy recommendations.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
----
+## React Compiler
 
-## 🚀 Project Goal
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-To create a modern web application where Pokémon players can:
+## Expanding the ESLint configuration
 
-- Explore a full Pokédex
-- Understand type strengths and weaknesses
-- Build and analyze teams
-- Get strategic battle advice using AI
-
-This project is being built as a full-stack portfolio application.
-
----
-
-## ✨ Planned Features
-
-- 🔍 Full Pokédex powered by PokéAPI
-- 📄 Detailed Pokémon pages (types, stats, abilities, roles)
-- 🎯 Interactive type chart
-- 👥 Team builder (up to 6 Pokémon)
-- 📊 Automatic team weakness & coverage analysis
-- 🤖 AI battle assistant chat
-- 💾 Save teams and battle history
-- 📱 Responsive modern UI
-
----
-
-## 🗺️ Roadmap / Checklist
-
-### Phase 1 – Core
-
-- [ ] Project structure
-- [ ] Pokédex
-- [ ] Pokémon detail pages
-
-### Phase 2 – Systems
-
-- [ ] Type chart logic
-- [ ] Team builder
-- [ ] Team analysis
-
-### Phase 3 – Intelligence
-
-- [ ] AI battle assistant
-- [ ] User accounts
-- [ ] Save teams
-
----
-
-## 🛠️ Tech Stack
-
-### Frontend
-
-- React + Vite
-- React Router
-- Bootstrap + custom CSS
-
-### Backend (planned)
-
-- Flask (Python)
-- PostgreSQL
-- AI integration (battle assistant)
-
----
-
-## 📌 Project Status
-
-🟡 In development — early stage.
-
----
-
-## Setup / Installation
-
-Clone the repo:
-
-```bash
-git clone https://github.com/your-username/poke-strat-ai.git
-cd poke-strat-ai
-npm install
-npm run dev
-```
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

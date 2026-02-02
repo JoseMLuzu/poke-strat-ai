@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Pokedex from "./pages/Pokedex";
 import TeamPage from "./pages/TeamPage";
+import PokemonDetail from "./pages/PokemonDetail";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Pokedex />} />
         <Route path="/team" element={<TeamPage />} />
+        <Route path="/pokemon/:id" element={<PokemonDetail />} />
       </Routes>
     </Router>
   );

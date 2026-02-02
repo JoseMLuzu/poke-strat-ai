@@ -1,5 +1,5 @@
 // api.js
-export async function getPokemons(limit = 20, offset = 0) {
+export async function getPokemons(limit = 1025, offset = 0) {
   try {
     const res = await fetch(
       `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`,
@@ -14,8 +14,13 @@ export async function getPokemons(limit = 20, offset = 0) {
         return {
           id: details.id,
           name: details.name,
-          image: details.sprites.front_default,
+          image:
+            details.sprites.other["official-artwork"].front_default ||
+            details.sprites.other["home"].front_default ||
+            details.sprites.front_default,
+
           types: details.types.map((t) => t.type.name),
+          number: details.order,
         };
       }),
     );

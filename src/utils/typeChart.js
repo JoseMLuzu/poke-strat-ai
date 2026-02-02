@@ -2,51 +2,24 @@
 
 // Lista de tipos y contra quién son fuertes (2x) y débiles (0.5x)
 export const typeChart = {
-  normal: { weak: ["fighting"], strong: [] },
-  fire: {
-    weak: ["water", "ground", "rock"],
-    strong: ["grass", "ice", "bug", "steel"],
-  },
-  water: { weak: ["electric", "grass"], strong: ["fire", "ground", "rock"] },
-  grass: {
-    weak: ["fire", "ice", "poison", "flying", "bug"],
-    strong: ["water", "ground", "rock"],
-  },
-  electric: { weak: ["ground"], strong: ["water", "flying"] },
-  ice: {
-    weak: ["fire", "fighting", "rock", "steel"],
-    strong: ["grass", "ground", "flying", "dragon"],
-  },
-  fighting: {
-    weak: ["flying", "psychic", "fairy"],
-    strong: ["normal", "ice", "rock", "dark", "steel"],
-  },
-  poison: { weak: ["ground", "psychic"], strong: ["grass", "fairy"] },
-  ground: {
-    weak: ["water", "grass", "ice"],
-    strong: ["fire", "electric", "poison", "rock", "steel"],
-  },
-  flying: {
-    weak: ["electric", "ice", "rock"],
-    strong: ["grass", "fighting", "bug"],
-  },
-  psychic: { weak: ["bug", "ghost", "dark"], strong: ["fighting", "poison"] },
-  bug: {
-    weak: ["fire", "flying", "rock"],
-    strong: ["grass", "psychic", "dark"],
-  },
-  rock: {
-    weak: ["water", "grass", "fighting", "ground", "steel"],
-    strong: ["fire", "ice", "flying", "bug"],
-  },
-  ghost: { weak: ["ghost", "dark"], strong: ["psychic", "ghost"] },
-  dragon: { weak: ["ice", "dragon", "fairy"], strong: ["dragon"] },
-  dark: { weak: ["fighting", "bug", "fairy"], strong: ["psychic", "ghost"] },
-  steel: {
-    weak: ["fire", "fighting", "ground"],
-    strong: ["ice", "rock", "fairy"],
-  },
-  fairy: { weak: ["poison", "steel"], strong: ["fighting", "dragon", "dark"] },
+  fire: { weaknesses: ["water", "ground", "rock"] },
+  water: { weaknesses: ["electric", "grass"] },
+  grass: { weaknesses: ["fire", "ice", "poison", "flying", "bug"] },
+  electric: { weaknesses: ["ground"] },
+  ice: { weaknesses: ["fire", "fighting", "rock", "steel"] },
+  fighting: { weaknesses: ["flying", "psychic", "fairy"] },
+  poison: { weaknesses: ["ground", "psychic"] },
+  ground: { weaknesses: ["water", "grass", "ice"] },
+  flying: { weaknesses: ["electric", "ice", "rock"] },
+  psychic: { weaknesses: ["bug", "ghost", "dark"] },
+  bug: { weaknesses: ["fire", "flying", "rock"] },
+  rock: { weaknesses: ["water", "grass", "fighting", "ground", "steel"] },
+  ghost: { weaknesses: ["ghost", "dark"] },
+  dragon: { weaknesses: ["ice", "dragon", "fairy"] },
+  dark: { weaknesses: ["fighting", "bug", "fairy"] },
+  steel: { weaknesses: ["fire", "fighting", "ground"] },
+  fairy: { weaknesses: ["poison", "steel"] },
+  normal: { weaknesses: ["fighting"] },
 };
 
 // Dado un Pokémon con 1 o 2 tipos, devuelve debilidades y resistencias

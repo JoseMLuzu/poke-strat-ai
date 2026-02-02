@@ -5,6 +5,7 @@ import PokemonCard from "../components/PokemonCard";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function Pokedex() {
   const [pokemons, setPokemons] = useState([]);
@@ -27,7 +28,14 @@ export default function Pokedex() {
       String(pokemon.number).padStart(3, "0").includes(searchTerm),
   );
 
-  if (loading) return <p className="p-4 text-lg">Loading Pokémon...</p>;
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex flex-col items-center justify-center text-center gap-4 bg-background">
+        <Spinner />
+        <p className="text-lg font-medium">Loading Pokémon...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-screen p-4">
@@ -43,7 +51,7 @@ export default function Pokedex() {
                 setSearchTerm(e.target.value);
                 setVisibleCount(30);
               }}
-              className="text-sm border-2"
+              className="text-sm border-2 hover:border-yellow-700"
               style={{
                 color: "#374151",
                 backgroundColor: "#ffffff",
@@ -51,12 +59,6 @@ export default function Pokedex() {
               }}
             />
           </Field>
-          <Button
-            className="text-sm px-3 py-1 text-white"
-            style={{ marginLeft: "1rem" }}
-          >
-            Search
-          </Button>
         </div>
       </div>
       <div className="flex justify-center items-start mt-4">

@@ -1,15 +1,20 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import Pokedex from "./pages/Pokedex.jsx";
-import TypeTest from "./pages/TypeTest.jsx";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Pokedex from "./pages/Pokedex";
+import TeamPage from "./pages/TeamPage";
 
 function App() {
   return (
-    <div className="App">
-      <Pokedex />
-    </div>
+    <Router>
+      <nav className="p-4 bg-gray-100 flex gap-4">
+        <Link to="/">Pokédex</Link>
+        <Link to="/team">Team Builder</Link>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Pokedex />} />
+        <Route path="/team" element={<TeamPage />} />
+      </Routes>
+    </Router>
   );
 }
 

@@ -9,7 +9,12 @@ export default function PokemonCard({ pokemon }) {
 
   return (
     <Link to={`/pokemon/${pokemon.id}`} className="block">
-      <Card className="relative border-2 p-6 w-45 cursor-pointer transition-transform hover:scale-105 hover:shadow-lg hover:border-yellow-500">
+      <Card
+        className="relative border-2 border-zinc-700 p-6 w-45 cursor-pointer
+transition-transform hover:scale-105 hover:shadow-lg
+hover:border-zinc-500
+bg-gradient-to-b from-zinc-100/10 to-zinc-950/30"
+      >
         <CardContent className="flex flex-col items-center p-0 w-full relative">
           {/* Difuminado detrás del Pokémon */}
           <div

@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 import { getPokemons } from "../utils/api";
 import PokemonCard from "../components/PokemonCard";
-import { typeColor } from "../utils/colors.js"; // 👈 usa tu mapa de colores
+import { typeColor } from "../utils/colors";
 
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import { Badge } from "@/components/ui/badge";
 
 export default function Pokedex() {
   const [pokemons, setPokemons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [visibleCount, setVisibleCount] = useState(30);
-
-  // 👇 ahora es array
   const [selectedTypes, setSelectedTypes] = useState([]);
 
   const pokemonTypes = [
@@ -49,7 +48,6 @@ export default function Pokedex() {
 
   const toggleType = (type) => {
     setVisibleCount(30);
-
     setSelectedTypes((prev) =>
       prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
     );
@@ -91,36 +89,35 @@ export default function Pokedex() {
               setSearchTerm(e.target.value);
               setVisibleCount(30);
             }}
-            className="text-sm border-2 hover:border-yellow-700 bg-black placeholder:text-gray-500"
-            style={{
-              color: "#374151",
-              borderColor: "#6b7280",
-            }}
+            className="text-sm border-2 bg-black placeholder:text-gray-500 hover:border-zinc-500"
           />
         </Field>
       </div>
 
-      {/* Types horizontal chips */}
+      {/* Types as Badges */}
       <div className="flex justify-center mb-6 overflow-x-auto">
         <div className="flex gap-2 px-4">
           {pokemonTypes.map((type) => {
             const isActive = selectedTypes.includes(type);
 
             return (
-              <button
+              <Badge
                 key={type}
                 onClick={() => toggleType(type)}
-                className={`px-3 py-1 rounded-full text-xs font-semibold capitalize transition-transform duration-150
-                  ${isActive ? "scale-110 shadow-lg" : "opacity-60 hover:opacity-100"}
+                className={`cursor-pointer select-none px-3 py-1 rounded-full text-xs font-semibold capitalize transition-all duration-150
+                  ${
+                    isActive
+                      ? "scale-110 shadow-lg ring- ring-white"
+                      : "opacity-50 hover:opacity-100"
+                  }
                 `}
                 style={{
-                  backgroundColor: typeColor[type],
+                  backgroundColor: typeColor(type),
                   color: "#fff",
-                  border: isActive ? "2px solid white" : "none",
                 }}
               >
                 {type}
-              </button>
+              </Badge>
             );
           })}
         </div>

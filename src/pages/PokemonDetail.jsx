@@ -44,7 +44,7 @@ export default function PokemonDetail() {
   if (error || !pokemon) {
     return (
       <div className="min-h-screen w-screen p-4 flex flex-col items-center justify-center gap-4">
-        <p className="text-xl font-bold text-red-500">{error || "Pokémon no encontrado"}</p>
+        <p className="text-xl font-bold text-destructive">{error || "Pokémon no encontrado"}</p>
         <Button onClick={() => navigate("/")}>Volver al Pokédex</Button>
       </div>
     );
@@ -84,7 +84,7 @@ export default function PokemonDetail() {
                 alt={pokemon.name}
                 className="h-64 w-auto mb-4 object-contain"
               />
-              <h5 className="font-bold text-gray-400 opacity-60 text-sm mb-2">
+              <h5 className="font-bold text-muted-foreground opacity-60 text-sm mb-2">
                 #{String(pokemon.number).padStart(3, "0")}
               </h5>
               <h1 className="text-3xl font-bold capitalize mb-4">
@@ -94,7 +94,7 @@ export default function PokemonDetail() {
                 {pokemon.types.map((type) => (
                   <Badge
                     key={type}
-                    className="text-white font-semibold px-4 py-2 rounded-full text-sm"
+                    className="text-foreground font-semibold px-4 py-2 rounded-full text-sm"
                     style={{ backgroundColor: typeColor(type) }}
                   >
                     {type}
@@ -111,15 +111,15 @@ export default function PokemonDetail() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="text-sm text-gray-600 mb-1">Altura</p>
+                <p className="text-sm text-muted-foreground mb-1">Altura</p>
                 <p className="text-lg font-semibold">{pokemon.height} m</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600 mb-1">Peso</p>
+                <p className="text-sm text-muted-foreground mb-1">Peso</p>
                 <p className="text-lg font-semibold">{pokemon.weight} kg</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600 mb-2">Habilidades</p>
+                <p className="text-sm text-muted-foreground mb-2">Habilidades</p>
                 <div className="flex flex-wrap gap-2">
                   {pokemon.abilities.map((ability, idx) => (
                     <Badge
@@ -151,7 +151,7 @@ export default function PokemonDetail() {
                       </span>
                       <span className="text-sm font-bold">{stat.value}</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div className="w-full bg-muted rounded-full h-2.5">
                       <div
                         className="h-2.5 rounded-full transition-all"
                         style={{
@@ -180,7 +180,7 @@ export default function PokemonDetail() {
                         <Link
                           to={`/pokemon/${evolution.id}`}
                           className={`flex flex-col items-center transition-transform hover:scale-105 w-full ${
-                            evolution.isCurrent ? "ring-4 ring-yellow-400 rounded-lg p-2" : ""
+                            evolution.isCurrent ? "ring-4 ring-primary rounded-lg p-2" : ""
                           }`}
                         >
                           <img
@@ -193,14 +193,14 @@ export default function PokemonDetail() {
                           <p className="text-sm font-semibold capitalize text-center mb-1">
                             {evolution.name.replace(/-/g, " ")}
                           </p>
-                          <p className="text-xs text-gray-500 mb-2">
+                          <p className="text-xs text-muted-foreground mb-2">
                             #{String(evolution.id).padStart(3, "0")}
                           </p>
                         </Link>
                         
                         {evolution.requirements.length > 0 && (
                           <div className="mt-2 text-center w-full">
-                            <p className="text-xs font-semibold text-gray-600 mb-1">
+                            <p className="text-xs font-semibold text-muted-foreground mb-1">
                               Requisitos:
                             </p>
                             <div className="flex flex-col gap-1">
@@ -220,16 +220,16 @@ export default function PokemonDetail() {
                       
                       {index < pokemon.evolutions.length - 1 && (
                         <div className="flex items-center h-full pt-12">
-                          <ArrowRight className="h-6 w-6 text-gray-400" />
+                          <ArrowRight className="h-6 w-6 text-muted-foreground" />
                         </div>
                       )}
                     </div>
                   ))}
                 </div>
                 {pokemon.evolutions.length === 1 && (
-                  <p className="text-sm text-gray-500 text-center mt-4">
-                    Este Pokémon no tiene evoluciones
-                  </p>
+<p className="text-sm text-muted-foreground text-center mt-4">
+                  Este Pokémon no tiene evoluciones
+                </p>
                 )}
               </CardContent>
             </Card>
@@ -249,7 +249,7 @@ export default function PokemonDetail() {
                 ))}
               </div>
               {pokemon.moves.length === 10 && (
-                <p className="text-sm text-gray-500 mt-2">
+                <p className="text-sm text-muted-foreground mt-2">
                   Mostrando primeros 10 movimientos
                 </p>
               )}

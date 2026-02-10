@@ -89,7 +89,7 @@ export default function Pokedex() {
               setSearchTerm(e.target.value);
               setVisibleCount(30);
             }}
-            className="text-sm border-2 bg-black placeholder:text-gray-500 hover:border-zinc-500"
+            className="text-sm border-2 border-border bg-background placeholder:text-muted-foreground hover:border-border"
           />
         </Field>
       </div>
@@ -104,16 +104,15 @@ export default function Pokedex() {
               <Badge
                 key={type}
                 onClick={() => toggleType(type)}
-                className={`cursor-pointer select-none px-3 py-1 rounded-full text-xs font-semibold capitalize transition-all duration-150
+                className={`cursor-pointer select-none px-3 py-1 rounded-full text-xs font-semibold capitalize transition-all duration-150 text-foreground
                   ${
                     isActive
-                      ? "scale-110 shadow-lg ring- ring-white"
+                      ? "scale-110 shadow-lg ring-2 ring-primary"
                       : "opacity-50 hover:opacity-100"
                   }
                 `}
                 style={{
                   backgroundColor: typeColor(type),
-                  color: "#fff",
                 }}
               >
                 {type}
@@ -131,6 +130,8 @@ export default function Pokedex() {
           ))}
         </div>
       </div>
+
+      <div className="bg-background text-foreground p-10">TOKEN TEST</div>
 
       {/* Load More */}
       {visibleCount < filteredPokemons.length && (

@@ -64,7 +64,7 @@ export default function TeamBuilder({ pokemons }) {
         {Object.entries(weaknesses).map(([type, count]) => (
           <span
             key={type}
-            className="px-2 py-1 rounded text-white text-sm"
+            className="px-2 py-1 rounded text-foreground text-sm"
             style={{ backgroundColor: typeColor(type) }}
             title={`${count} Pokémon vulnerable`}
           >

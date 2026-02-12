@@ -9,12 +9,15 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { Badge } from "@/components/ui/badge";
 
+import { Filter } from "lucide-react";
+
 export default function Pokedex() {
   const [pokemons, setPokemons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [visibleCount, setVisibleCount] = useState(30);
   const [selectedTypes, setSelectedTypes] = useState([]);
+  const [showFilterTypes, setShowFilterTypes] = useState(false);
 
   const pokemonTypes = [
     "normal",
@@ -78,48 +81,55 @@ export default function Pokedex() {
     <div className="min-h-screen w-screen p-4">
       <h1 className="text-2xl font-bold mb-4 text-center">Pokédex</h1>
 
-      {/* Search */}
+      {/* Search + Filter */}
       <div className="flex justify-center mb-4">
-        <Field orientation="horizontal" className="w-80">
-          <Input
-            type="search"
-            placeholder="Search by name or number..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setVisibleCount(30);
-            }}
-            className="text-sm border-2 border-border bg-background placeholder:text-muted-foreground hover:border-border"
-          />
-        </Field>
+        <div className="flex items-center gap-3 w-80">
+          <Field orientation="horizontal" className="flex-1">
+            <Input
+              type="search"
+              placeholder="Search by name or number..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setVisibleCount(30);
+              }}
+              className="text-sm border-2 border-border bg-background placeholder:text-muted-foreground"
+            />
+          </Field>
+
+          <Button
+            onClick={() => setShowFilterTypes((prev) => !prev)}
+            className="bg-background text-muted-foreground border-2 border-border border-gray-500/70 hover:!bg-accent hover:!text-accent-foreground transition-colors"
+          >
+            <Filter className="w-4 h-4" />
+          </Button>
+        </div>
       </div>
 
       {/* Types as Badges */}
-      <div className="flex justify-center mb-6 overflow-x-auto">
-        <div className="flex gap-2 px-4">
-          {pokemonTypes.map((type) => {
-            const isActive = selectedTypes.includes(type);
-
-            return (
-              <Badge
-                key={type}
-                onClick={() => toggleType(type)}
-                className={`cursor-pointer select-none px-3 py-1 rounded-full text-xs font-semibold capitalize transition-all duration-150 text-foreground
-                  ${
+      {showFilterTypes && (
+        <div className="flex justify-center mb-6 overflow-x-auto">
+          <div className="flex gap-2 px-4">
+            {pokemonTypes.map((type) => {
+              const isActive = selectedTypes.includes(type);
+              return (
+                <Badge
+                  key={type}
+                  onClick={() => toggleType(type)}
+                  className={`cursor-pointer select-none px-3 py-1 rounded-full text-xs font-semibold capitalize transition-all duration-150 text-foreground ${
                     isActive
-                      ? "scale-110 shadow-lg ring-2 ring-primary"
+                      ? "scale-110 shadow-lg ring-primary"
                       : "opacity-50 hover:opacity-100"
-                  }
-                `}
-                style={{
-                  backgroundColor: typeColor(type),
-                }}
-              >
-                {type}
-              </Badge>
-            );
-          })}
+                  }`}
+                  style={{ backgroundColor: typeColor(type) }}
+                >
+                  {type}
+                </Badge>
+              );
+            })}
+          </div>
         </div>
+      )}
       </div>
 
       {/* Grid */}

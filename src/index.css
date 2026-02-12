@@ -17,7 +17,7 @@
   --secondary: 230 20% 18%;
   --secondary-foreground: 210 40% 98%;
 
-  --accent: 280 100% 65%;
+  --accent: 280 69% 51%;
   --accent-foreground: 210 40% 98%;
 
   --muted: 230 20% 15%;
@@ -57,6 +57,9 @@
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
+
+  --color-filter-button: hsl(var(--filter-button));
+  --color-filter-button-foreground: hsl(var(--filter-button-foreground));
 }
 
 body {

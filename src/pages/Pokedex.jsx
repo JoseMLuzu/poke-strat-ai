@@ -150,14 +150,12 @@ export default function Pokedex() {
         </div>
       </div>
 
-      <div className="bg-background text-foreground p-10">TOKEN TEST</div>
-
       {/* Load More */}
       {visibleCount < filteredPokemons.length && (
         <div className="flex justify-center mt-6">
           <Button
             onClick={() => setVisibleCount((prev) => prev + 30)}
-            className="px-6 py-2"
+            className="px-6 py-2 bg-background text-muted-foreground border-2 border-border border-gray-500/70 hover:!bg-accent hover:!text-accent-foreground transition-colors"
           >
             Load more
           </Button>

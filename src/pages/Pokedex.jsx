@@ -108,6 +108,18 @@ export default function Pokedex() {
           >
             <Filter className="w-4 h-4" />
           </Button>
+
+          {/* Botón de Clear Filters */}
+          <Button
+            onClick={() => {
+              setSearchTerm(""); // limpia el input
+              setSelectedTypes([]); // limpia los tipos seleccionados
+              setVisibleCount(30); // opcional: reset contador
+            }}
+            className="flex items-center justify-center bg-background text-muted-foreground border-2 border-border hover:!bg-red-500 hover:!text-white transition-colors"
+          >
+            Clear
+          </Button>
         </div>
       </div>
 

@@ -18,6 +18,7 @@ export default function Pokedex() {
   const [visibleCount, setVisibleCount] = useState(30);
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [showFilterTypes, setShowFilterTypes] = useState(false);
+  const [displayedCount, setDisplayedCount] = useState(0);
 
   const pokemonTypes = [
     "normal",
@@ -49,13 +50,6 @@ export default function Pokedex() {
     fetchData();
   }, []);
 
-  const toggleType = (type) => {
-    setVisibleCount(30);
-    setSelectedTypes((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
-    );
-  };
-
   const filteredPokemons = pokemons.filter((pokemon) => {
     const matchesSearch =
       pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -67,6 +61,17 @@ export default function Pokedex() {
 
     return matchesSearch && matchesType;
   });
+
+  useEffect(() => {
+    setDisplayedCount(Math.min(visibleCount, filteredPokemons.length));
+  }, [pokemons, searchTerm, selectedTypes, visibleCount]);
+
+  const toggleType = (type) => {
+    setVisibleCount(30);
+    setSelectedTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
+    );
+  };
 
   if (loading) {
     return (
@@ -130,6 +135,10 @@ export default function Pokedex() {
           </div>
         </div>
       )}
+
+      {/* Counter */}
+      <div className="text-center mb-4 text-sm text-muted-foreground">
+        Showing {displayedCount} of {filteredPokemons.length} Pokémon
       </div>
 
       {/* Grid */}

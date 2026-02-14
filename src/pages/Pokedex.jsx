@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { Badge } from "@/components/ui/badge";
 
-import { Filter } from "lucide-react";
+import { Filter, Search } from "lucide-react";
 
 export default function Pokedex() {
   const [pokemons, setPokemons] = useState([]);
@@ -83,19 +83,23 @@ export default function Pokedex() {
   }
 
   return (
-    <div className="min-h-screen w-screen p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center">Pokédex</h1>
-
-      {/* Search + Filter */}
-      <div className="flex justify-center mb-4">
-        <div className="flex items-center gap-3 w-80">
-          <Field orientation="horizontal" className="flex-1">
-            <Input
-              type="search"
-              placeholder="Search by name or number..."
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
+        {/* Search + Filter */}
+        <div className="flex justify-center mb-6">
+          <div className="flex items-center gap-3 w-full max-w-lg">
+            {/* Input */}
+            <div className="relative flex-1">
+              <Input
+                type="search"
+                placeholder="Search by name or number..."
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setVisibleCount(30);
+                }}
+                className="text-sm h-12 pl-10 pr-4 border-2 border-border bg-background w-full"
+              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+            </div>
                 setVisibleCount(30);
               }}
               className="text-sm border-2 border-border bg-background placeholder:text-muted-foreground"

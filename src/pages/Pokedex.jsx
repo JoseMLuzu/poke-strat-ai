@@ -100,6 +100,14 @@ export default function Pokedex() {
               />
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             </div>
+
+            {/* Filter Button */}
+            <Button
+              onClick={() => setShowFilterTypes((prev) => !prev)}
+              className="flex items-center justify-center bg-background text-muted-foreground border-2 border-border hover:!bg-primary hover:!text-primary-foreground transition-colors"
+            >
+              <Filter className="w-4 h-4" />
+            </Button>
                 setVisibleCount(30);
               }}
               className="text-sm border-2 border-border bg-background placeholder:text-muted-foreground"
@@ -166,17 +174,8 @@ export default function Pokedex() {
         </div>
       </div>
 
-      {/* Load More */}
-      {visibleCount < filteredPokemons.length && (
-        <div className="flex justify-center mt-6">
-          <Button
-            onClick={() => setVisibleCount((prev) => prev + 30)}
-            className="px-6 py-2 bg-background text-muted-foreground border-2 border-border border-gray-500/70 hover:!bg-accent hover:!text-accent-foreground transition-colors"
-          >
-            Load more
-          </Button>
-        </div>
-      )}
+              className="px-6 py-2 bg-background text-muted-foreground border-2 border-border hover:!bg-primary hover:!text-primary-foreground transition-colors"
+            >
     </div>
   );
 }

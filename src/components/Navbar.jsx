@@ -20,7 +20,7 @@ export default function Navbar() {
   const location = useLocation();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
+    <nav className="sticky top-0 z-50 bg-background border-b border-border">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo: círculo naranja con estrella + texto PokéStrat AI */}
@@ -29,7 +29,10 @@ export default function Navbar() {
               className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-[0_0_20px_rgba(255,170,0,0.5)]"
               aria-hidden
             >
-              <Sparkles className="w-5 h-5 text-primary-foreground" strokeWidth={2.5} />
+              <Sparkles
+                className="w-5 h-5 text-primary-foreground"
+                strokeWidth={2.5}
+              />
             </div>
             <span className="font-semibold text-xl tracking-wide">
               <span className="text-primary">PokéStrat</span>

@@ -4,7 +4,6 @@ import PokemonCard from "../components/PokemonCard";
 import { typeColor } from "../utils/colors";
 
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { Badge } from "@/components/ui/badge";
@@ -75,7 +74,7 @@ export default function Pokedex() {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 flex flex-col items-center justify-center text-center gap-4 bg-background">
+      <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 bg-background">
         <Spinner />
         <p className="text-lg font-medium">Loading Pokémon...</p>
       </div>
@@ -83,6 +82,10 @@ export default function Pokedex() {
   }
 
   return (
+    <div className="min-h-screen w-full px-4 py-6">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-2xl font-bold mb-6 text-center">Pokédex</h1>
+
         {/* Search + Filter */}
         <div className="flex justify-center mb-6">
           <div className="flex items-center gap-3 w-full max-w-lg">
@@ -108,74 +111,70 @@ export default function Pokedex() {
             >
               <Filter className="w-4 h-4" />
             </Button>
+
+            {/* Clear Button */}
+            <Button
+              onClick={() => {
+                setSearchTerm("");
+                setSelectedTypes([]);
                 setVisibleCount(30);
               }}
-              className="text-sm border-2 border-border bg-background placeholder:text-muted-foreground"
-            />
-          </Field>
-
-          <Button
-            onClick={() => setShowFilterTypes((prev) => !prev)}
-            className="bg-background text-muted-foreground border-2 border-border border-gray-500/70 hover:!bg-accent hover:!text-accent-foreground transition-colors"
-          >
-            <Filter className="w-4 h-4" />
-          </Button>
-
-          {/* Botón de Clear Filters */}
-          <Button
-            onClick={() => {
-              setSearchTerm(""); // limpia el input
-              setSelectedTypes([]); // limpia los tipos seleccionados
-              setVisibleCount(30); // opcional: reset contador
-            }}
-            className="flex items-center justify-center bg-background text-muted-foreground border-2 border-border hover:!bg-red-500 hover:!text-white transition-colors"
-          >
-            Clear
-          </Button>
-        </div>
-      </div>
-
-      {/* Types as Badges */}
-      {showFilterTypes && (
-        <div className="flex justify-center mb-6 overflow-x-auto">
-          <div className="flex gap-2 px-4">
-            {pokemonTypes.map((type) => {
-              const isActive = selectedTypes.includes(type);
-              return (
-                <Badge
-                  key={type}
-                  onClick={() => toggleType(type)}
-                  className={`cursor-pointer select-none px-3 py-1 rounded-full text-xs font-semibold capitalize transition-all duration-150 text-foreground ${
-                    isActive
-                      ? "scale-110 shadow-lg ring-primary"
-                      : "opacity-50 hover:opacity-100"
-                  }`}
-                  style={{ backgroundColor: typeColor(type) }}
-                >
-                  {type}
-                </Badge>
-              );
-            })}
+              className="flex items-center justify-center bg-background text-muted-foreground border-2 border-border hover:!bg-red-500 hover:!text-white transition-colors"
+            >
+              Clear
+            </Button>
           </div>
         </div>
-      )}
 
-      {/* Counter */}
-      <div className="text-center mb-4 text-sm text-muted-foreground">
-        Showing {displayedCount} of {filteredPokemons.length} Pokémon
-      </div>
+        {/* Types */}
+        {showFilterTypes && (
+          <div className="flex justify-center mb-6 overflow-x-auto">
+            <div className="flex gap-2 px-2">
+              {pokemonTypes.map((type) => {
+                const isActive = selectedTypes.includes(type);
+                return (
+                  <Badge
+                    key={type}
+                    onClick={() => toggleType(type)}
+                    className={`cursor-pointer select-none px-3 py-1 rounded-full text-xs font-semibold capitalize transition-all duration-150 ${
+                      isActive
+                        ? "scale-110 shadow-lg"
+                        : "opacity-50 hover:opacity-100"
+                    }`}
+                    style={{ backgroundColor: typeColor(type) }}
+                  >
+                    {type}
+                  </Badge>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
-      {/* Grid */}
-      <div className="flex justify-center items-start mt-4">
-        <div className="grid grid-cols-6 max-w-full" style={{ gap: "0.75rem" }}>
+        {/* Counter */}
+        <div className="text-center mb-6 text-sm text-muted-foreground">
+          Showing {displayedCount} of {filteredPokemons.length} Pokémon
+        </div>
+
+        {/* Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {filteredPokemons.slice(0, visibleCount).map((pokemon) => (
             <PokemonCard key={pokemon.id} pokemon={pokemon} />
           ))}
         </div>
-      </div>
 
+        {/* Load More */}
+        {visibleCount < filteredPokemons.length && (
+          <div className="flex justify-center mt-8">
+            <Button
+              onClick={() => setVisibleCount((prev) => prev + 30)}
               className="px-6 py-2 bg-background text-muted-foreground border-2 border-border hover:!bg-primary hover:!text-primary-foreground transition-colors"
             >
+              Load more
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

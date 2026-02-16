@@ -42,7 +42,7 @@ This project is being built as a full-stack portfolio application.
 ### Phase 1 – Core
 
 - [x] Project structure
-- [ ] Pokédex
+- [x] Pokédex
 - [ ] Pokémon detail pages
 
 ### Phase 2 – Systems

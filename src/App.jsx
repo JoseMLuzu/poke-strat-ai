@@ -9,13 +9,6 @@ function App() {
   return (
     <Router>
       <Navbar />
-      {/* Test: design tokens conectados a Tailwind */}
-      <div className="bg-background text-foreground border border-border p-3 rounded mb-2">
-        Tokens OK: bg-background, text-foreground, border-border
-      </div>
-      <Link to="/">Pokédex</Link>
-      <Link to="/team">Team Builder</Link>
-
       <Routes>
         <Route path="/" element={<Pokedex />} />
         <Route path="/team" element={<TeamPage />} />

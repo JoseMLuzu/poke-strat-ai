@@ -1,16 +1,23 @@
-// api.js
+const BASE_URL = "https://pokeapi.co/api/v2";
+
+/* ===============================
+   🔹 Get Pokémons List
+================================= */
 export async function getPokemons(limit = 1025, offset = 0) {
   try {
     const res = await fetch(
-      `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`,
+      `${BASE_URL}/pokemon?limit=${limit}&offset=${offset}`,
     );
+
+    if (!res.ok) throw new Error("Failed to fetch Pokémon list");
+
     const data = await res.json();
 
-    // Traer detalles completos de cada Pokémon
     const detailedPokemons = await Promise.all(
       data.results.map(async (p) => {
         const resDetail = await fetch(p.url);
         const details = await resDetail.json();
+
         return {
           id: details.id,
           name: details.name,
@@ -27,7 +34,7 @@ export async function getPokemons(limit = 1025, offset = 0) {
 
     return detailedPokemons;
   } catch (error) {
-    console.error("Error fetching Pokémon:", error);
+    console.error("Error fetching Pokémon list:", error);
     return [];
   }
 }
@@ -268,9 +275,10 @@ export async function getPokemonDetails(idOrName) {
         details.sprites.other["home"].front_default ||
         details.sprites.front_default,
       types: details.types.map((t) => t.type.name),
-      number: details.order,
-      height: details.height / 10, // Convertir de decímetros a metros
-      weight: details.weight / 10, // Convertir de hectogramos a kg
+      number: details.id,
+      height: details.height / 10,
+      weight: details.weight / 10,
+      description,
       stats: details.stats.map((stat) => ({
         name: stat.stat.name,
         value: stat.base_stat,

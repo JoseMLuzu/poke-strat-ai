@@ -302,19 +302,28 @@ export default function PokemonDetail() {
             </Card>
           )}
 
-          {/* Movimientos */}
-          <Card className="md:col-span-2 border-4" style={{ borderColor: typeColor(primaryType) }}>
+          {/* Moves */}
+          <Card className="md:col-span-2 border border-border shadow-md bg-card p-5">
             <CardHeader>
               <CardTitle>Movimientos</CardTitle>
             </CardHeader>
+
             <CardContent>
               <div className="flex flex-wrap gap-2">
-                {pokemon.moves.map((move, idx) => (
-                  <Badge key={idx} variant="outline" className="capitalize">
-                    {move.replace("-", " ")}
+                {pokemon.moves.map((move) => (
+                  <Badge
+                    key={move.name}
+                    className="capitalize font-medium px-3 py-1 text-white transition-transform duration-200 hover:scale-105"
+                    style={{
+                      backgroundColor: typeColor(move.type),
+                      color: move.type === "electric" ? "#000" : "#fff",
+                    }}
+                  >
+                    {move.name.replace("-", " ")}
                   </Badge>
                 ))}
               </div>
+
               {pokemon.moves.length === 10 && (
                 <p className="text-sm text-muted-foreground mt-2">
                   Mostrando primeros 10 movimientos

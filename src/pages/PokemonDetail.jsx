@@ -235,68 +235,63 @@ export default function PokemonDetail() {
 
           {/* Evoluciones */}
           {pokemon.evolutions && pokemon.evolutions.length > 0 && (
-            <Card className="md:col-span-2 border-4" style={{ borderColor: typeColor(primaryType) }}>
+            <Card className="md:col-span-2 border border-border shadow-md bg-card p-5">
               <CardHeader>
                 <CardTitle>Cadena de Evolución</CardTitle>
               </CardHeader>
+
               <CardContent>
-                <div className="flex flex-wrap items-start justify-center gap-6 md:gap-8">
+                <div className="flex flex-wrap justify-center items-center gap-8">
                   {pokemon.evolutions.map((evolution, index) => (
-                    <div key={evolution.id} className="flex items-start gap-2 md:gap-4">
-                      <div className="flex flex-col items-center max-w-[140px]">
-                        <Link
-                          to={`/pokemon/${evolution.id}`}
-                          className={`flex flex-col items-center transition-transform hover:scale-105 w-full ${
-                            evolution.isCurrent ? "ring-4 ring-primary rounded-lg p-2" : ""
-                          }`}
-                        >
-                          <img
-                            src={evolution.image}
-                            alt={evolution.name}
-                            className={`h-24 w-24 object-contain mb-2 ${
-                              evolution.isCurrent ? "" : "opacity-70 hover:opacity-100"
-                            }`}
-                          />
-                          <p className="text-sm font-semibold capitalize text-center mb-1">
-                            {evolution.name.replace(/-/g, " ")}
-                          </p>
-                          <p className="text-xs text-muted-foreground mb-2">
-                            #{String(evolution.id).padStart(3, "0")}
-                          </p>
-                        </Link>
-                        
+                    <div key={evolution.id} className="flex items-center gap-4">
+                      <Link
+                        to={`/pokemon/${evolution.id}`}
+                        className={`flex flex-col items-center transition-transform hover:scale-105 ${
+                          evolution.isCurrent
+                            ? "ring-2 ring-primary rounded-lg p-3"
+                            : ""
+                        }`}
+                      >
+                        <img
+                          src={evolution.image}
+                          alt={evolution.name}
+                          className="h-24 w-24 object-contain mb-2"
+                        />
+
+                        <p className="text-sm font-semibold capitalize">
+                          {evolution.name.replace(/-/g, " ")}
+                        </p>
+
+                        <p className="text-xs text-muted-foreground">
+                          #{String(evolution.id).padStart(3, "0")}
+                        </p>
+
                         {evolution.requirements.length > 0 && (
-                          <div className="mt-2 text-center w-full">
-                            <p className="text-xs font-semibold text-muted-foreground mb-1">
-                              Requisitos:
-                            </p>
-                            <div className="flex flex-col gap-1">
-                              {evolution.requirements.map((req, reqIdx) => (
-                                <Badge
-                                  key={reqIdx}
-                                  variant="outline"
-                                  className="text-xs px-2 py-0.5 whitespace-normal"
-                                >
-                                  {req}
-                                </Badge>
-                              ))}
-                            </div>
+                          <div className="flex flex-wrap justify-center gap-2 mt-2">
+                            {evolution.requirements.map((req, i) => (
+                              <span
+                                key={i}
+                                className="flex items-center px-3 py-1 text-xs font-medium bg-muted/70 border border-border rounded-full backdrop-blur-sm"
+                              >
+                                {getRequirementIcon(req.type)}
+                                {formatRequirement(req)}
+                              </span>
+                            ))}
                           </div>
                         )}
-                      </div>
-                      
+                      </Link>
+
                       {index < pokemon.evolutions.length - 1 && (
-                        <div className="flex items-center h-full pt-12">
-                          <ArrowRight className="h-6 w-6 text-muted-foreground" />
-                        </div>
+                        <ArrowRight className="h-6 w-6 text-muted-foreground" />
                       )}
                     </div>
                   ))}
                 </div>
+
                 {pokemon.evolutions.length === 1 && (
-<p className="text-sm text-muted-foreground text-center mt-4">
-                  Este Pokémon no tiene evoluciones
-                </p>
+                  <p className="text-center text-sm text-muted-foreground mt-6">
+                    This Pokémon has no evolutions.
+                  </p>
                 )}
               </CardContent>
             </Card>

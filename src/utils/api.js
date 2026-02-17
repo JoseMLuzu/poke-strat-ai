@@ -25,7 +25,6 @@ export async function getPokemons(limit = 1025, offset = 0) {
             details.sprites.other["official-artwork"].front_default ||
             details.sprites.other["home"].front_default ||
             details.sprites.front_default,
-
           types: details.types.map((t) => t.type.name),
           number: details.id,
         };
@@ -39,234 +38,161 @@ export async function getPokemons(limit = 1025, offset = 0) {
   }
 }
 
-async function getEvolutionChain(speciesUrl) {
-  try {
-    const speciesRes = await fetch(speciesUrl);
-    const speciesData = await speciesRes.json();
+/* ===============================
+   🔹 Extract Evolution Requirements
+================================= */
+function extractRequirements(details) {
+  if (!details) return [];
 
-    const evolutionChainRes = await fetch(speciesData.evolution_chain.url);
-    const evolutionChainData = await evolutionChainRes.json();
-
-    return evolutionChainData.chain;
-  } catch (error) {
-    console.error("Error fetching evolution chain:", error);
-    return null;
-  }
-}
-
-function extractRequirements(evolutionDetails) {
   const requirements = [];
 
-  // Nivel requerido
-  if (evolutionDetails.min_level) {
-    requirements.push(`Nivel ${evolutionDetails.min_level}`);
-  }
+  if (details.min_level)
+    requirements.push({ type: "level", value: details.min_level });
 
-  // Objeto requerido
-  if (evolutionDetails.item) {
-    const itemName = evolutionDetails.item.name.replace(/-/g, " ");
-    requirements.push(`Objeto: ${itemName}`);
-  }
+  if (details.min_happiness) requirements.push({ type: "friendship" });
 
-  // Condiciones especiales
-  if (evolutionDetails.trigger.name === "trade") {
-    requirements.push("Intercambio");
-    if (evolutionDetails.trade_species) {
-      requirements.push(
-        `con ${evolutionDetails.trade_species.name.replace(/-/g, " ")}`,
-      );
-    }
-  }
+  if (details.min_affection) requirements.push({ type: "affection" });
 
-  if (evolutionDetails.trigger.name === "use-item") {
-    const itemName =
-      evolutionDetails.item?.name.replace(/-/g, " ") || "especial";
-    requirements.push(`Usar objeto: ${itemName}`);
-  }
+  if (details.min_beauty) requirements.push({ type: "beauty" });
 
-  if (evolutionDetails.time_of_day) {
-    const time =
-      evolutionDetails.time_of_day === "day"
-        ? "Día"
-        : evolutionDetails.time_of_day === "night"
-          ? "Noche"
-          : evolutionDetails.time_of_day;
-    requirements.push(`Hora: ${time}`);
-  }
+  if (details.item)
+    requirements.push({
+      type: "item",
+      value: details.item.name.replace(/-/g, " "),
+    });
 
-  if (evolutionDetails.min_happiness) {
-    requirements.push(`Felicidad: ${evolutionDetails.min_happiness}`);
-  }
+  if (details.held_item)
+    requirements.push({
+      type: "held-item",
+      value: details.held_item.name.replace(/-/g, " "),
+    });
 
-  if (evolutionDetails.min_affection) {
-    requirements.push(`Afecto: ${evolutionDetails.min_affection}`);
-  }
+  if (details?.trigger?.name === "trade") requirements.push({ type: "trade" });
 
-  if (evolutionDetails.known_move_type) {
-    requirements.push(
-      `Movimiento tipo: ${evolutionDetails.known_move_type.name}`,
-    );
-  }
+  if (details.time_of_day)
+    requirements.push({
+      type: "time",
+      value: details.time_of_day,
+    });
 
-  if (evolutionDetails.known_move) {
-    requirements.push(
-      `Movimiento: ${evolutionDetails.known_move.name.replace(/-/g, " ")}`,
-    );
-  }
+  if (details.gender !== null && details.gender !== undefined)
+    requirements.push({
+      type: "gender",
+      value: details.gender === 1 ? "female" : "male",
+    });
 
-  if (evolutionDetails.location) {
-    requirements.push(
-      `Ubicación: ${evolutionDetails.location.name.replace(/-/g, " ")}`,
-    );
-  }
+  if (details.known_move)
+    requirements.push({
+      type: "move",
+      value: details.known_move.name.replace(/-/g, " "),
+    });
 
-  if (evolutionDetails.gender) {
-    requirements.push(
-      `Género: ${evolutionDetails.gender === 1 ? "Femenino" : "Masculino"}`,
-    );
-  }
+  if (details.known_move_type)
+    requirements.push({
+      type: "move-type",
+      value: details.known_move_type.name,
+    });
 
-  if (evolutionDetails.needs_overworld_rain) {
-    requirements.push("Lluvia");
-  }
-
-  if (evolutionDetails.relative_physical_stats !== null) {
-    if (evolutionDetails.relative_physical_stats === 1) {
-      requirements.push("Ataque > Defensa");
-    } else if (evolutionDetails.relative_physical_stats === -1) {
-      requirements.push("Defensa > Ataque");
-    } else {
-      requirements.push("Ataque = Defensa");
-    }
-  }
-
-  if (evolutionDetails.party_species) {
-    requirements.push(
-      `Pokémon en equipo: ${evolutionDetails.party_species.name.replace(/-/g, " ")}`,
-    );
-  }
-
-  if (evolutionDetails.party_type) {
-    requirements.push(`Tipo en equipo: ${evolutionDetails.party_type.name}`);
-  }
-
-  if (evolutionDetails.turn_upside_down) {
-    requirements.push("Consola boca abajo");
-  }
-
-  if (
-    requirements.length === 0 &&
-    evolutionDetails.trigger.name === "level-up"
-  ) {
-    requirements.push("Subir de nivel");
-  }
+  if (details.location)
+    requirements.push({
+      type: "location",
+      value: details.location.name.replace(/-/g, " "),
+    });
 
   return requirements;
 }
 
-function buildEvolutionChain(chain, chainList = []) {
-  const pokemonName = chain.species.name;
-
-  // Agregar el Pokémon base
-  chainList.push({
-    name: pokemonName,
-    requirements: [],
-    evolvesTo: [],
-  });
-
-  const currentIndex = chainList.length - 1;
-
-  // Procesar evoluciones
-  chain.evolves_to.forEach((evolution) => {
-    const evolutionDetails = evolution.evolution_details[0];
-    const requirements = extractRequirements(evolutionDetails);
-
-    const evolutionData = {
-      name: evolution.species.name,
-      requirements: requirements,
-      evolvesTo: [],
-    };
-
-    chainList[currentIndex].evolvesTo.push(evolutionData);
-
-    // Procesar recursivamente las siguientes evoluciones
-    if (evolution.evolves_to.length > 0) {
-      buildEvolutionChain(evolution, chainList);
-    }
-  });
-
-  return chainList;
-}
-
+/* ===============================
+   🔹 Get Pokémon Details
+================================= */
 export async function getPokemonDetails(idOrName) {
   try {
-    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${idOrName}`);
-    if (!res.ok) {
-      throw new Error("Pokémon not found");
-    }
-    const details = await res.json();
+    const [pokemonRes, speciesRes] = await Promise.all([
+      fetch(`${BASE_URL}/pokemon/${idOrName}`),
+      fetch(`${BASE_URL}/pokemon-species/${idOrName}`),
+    ]);
 
-    // Obtener información de evoluciones
-    const evolutionChain = await getEvolutionChain(details.species.url);
+    if (!pokemonRes.ok) throw new Error("Pokémon not found");
 
+    const details = await pokemonRes.json();
+    const speciesData = await speciesRes.json();
+
+    /* ===============================
+       📖 Description
+    ================================= */
+    const englishEntry = speciesData.flavor_text_entries.find(
+      (entry) => entry.language.name === "en",
+    );
+
+    const description = englishEntry
+      ? englishEntry.flavor_text.replace(/\f/g, " ")
+      : "No description available.";
+
+    /* ===============================
+       🎯 Fetch Moves With Type
+    ================================= */
+    const moves = await Promise.all(
+      details.moves.slice(0, 10).map(async (m) => {
+        const res = await fetch(m.move.url);
+        const moveData = await res.json();
+
+        return {
+          name: m.move.name,
+          type: moveData.type.name,
+        };
+      }),
+    );
+
+    /* ===============================
+       🧬 Evolution Chain
+    ================================= */
     let evolutions = [];
-    if (evolutionChain) {
-      // Extraer todos los Pokémon de la cadena de evolución
-      function extractAllPokemon(chain, list = []) {
+
+    try {
+      const evolutionRes = await fetch(speciesData.evolution_chain.url);
+      const evolutionData = await evolutionRes.json();
+
+      const chain = evolutionData.chain;
+
+      async function buildEvolutionList(
+        node,
+        evolutionDetailsFromParent = null,
+        list = [],
+      ) {
+        const pokemonRes = await fetch(
+          `${BASE_URL}/pokemon/${node.species.name}`,
+        );
+        const pokemonData = await pokemonRes.json();
+
+        const requirements = evolutionDetailsFromParent
+          ? extractRequirements(evolutionDetailsFromParent)
+          : [];
+
         list.push({
-          name: chain.species.name,
-          evolvesTo: chain.evolves_to.map((evo) => ({
-            name: evo.species.name,
-            requirements: extractRequirements(evo.evolution_details[0]),
-          })),
+          id: pokemonData.id,
+          name: pokemonData.name,
+          image:
+            pokemonData.sprites.other["official-artwork"].front_default ||
+            pokemonData.sprites.front_default,
+          isCurrent: pokemonData.name === details.name,
+          requirements,
         });
-        chain.evolves_to.forEach((evo) => extractAllPokemon(evo, list));
+
+        for (const evo of node.evolves_to) {
+          await buildEvolutionList(evo, evo.evolution_details?.[0], list);
+        }
+
         return list;
       }
 
-      const chainData = extractAllPokemon(evolutionChain);
-
-      // Obtener imágenes e IDs de todos los Pokémon en la cadena
-      const uniquePokemonNames = [...new Set(chainData.map((p) => p.name))];
-
-      const chainPokemonDetails = await Promise.all(
-        uniquePokemonNames.map(async (name) => {
-          try {
-            const pokemonRes = await fetch(
-              `https://pokeapi.co/api/v2/pokemon/${name}`,
-            );
-            const pokemonData = await pokemonRes.json();
-
-            // Encontrar los requisitos de evolución para este Pokémon
-            const evolutionInfo = chainData.find((p) =>
-              p.evolvesTo.some((evo) => evo.name === name),
-            );
-
-            return {
-              name: pokemonData.name,
-              id: pokemonData.id,
-              image:
-                pokemonData.sprites.other["official-artwork"].front_default ||
-                pokemonData.sprites.other["home"].front_default ||
-                pokemonData.sprites.front_default,
-              requirements:
-                evolutionInfo?.evolvesTo.find((evo) => evo.name === name)
-                  ?.requirements || [],
-              isCurrent: pokemonData.name === details.name,
-              order: pokemonData.order, // Para ordenar por número de Pokédex
-            };
-          } catch (err) {
-            return null;
-          }
-        }),
-      );
-
-      // Filtrar y ordenar por número de Pokédex
-      evolutions = chainPokemonDetails
-        .filter(Boolean)
-        .sort((a, b) => a.order - b.order);
+      evolutions = await buildEvolutionList(chain);
+    } catch (err) {
+      console.error("Evolution fetch error:", err);
     }
 
+    /* ===============================
+       📦 Return Clean Object
+    ================================= */
     return {
       id: details.id,
       name: details.name,
@@ -287,8 +213,8 @@ export async function getPokemonDetails(idOrName) {
         name: ability.ability.name,
         isHidden: ability.is_hidden,
       })),
-      moves: details.moves.slice(0, 10).map((move) => move.move.name), // Primeros 10 movimientos
-      evolutions: evolutions,
+      moves, // ✅ ahora es [{ name, type }]
+      evolutions,
     };
   } catch (error) {
     console.error("Error fetching Pokémon details:", error);

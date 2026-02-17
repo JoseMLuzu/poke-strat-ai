@@ -6,7 +6,19 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  Heart,
+  Sparkles,
+  Gem,
+  Repeat,
+  Clock,
+  User,
+  Sword,
+  MapPin,
+} from "lucide-react";
 
 export default function PokemonDetail() {
   const { id } = useParams();

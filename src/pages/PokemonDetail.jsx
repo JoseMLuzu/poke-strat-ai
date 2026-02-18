@@ -61,8 +61,7 @@ export default function PokemonDetail() {
         setPokemon(data);
         setError(null);
       } catch (err) {
-        setError("Pokémon no encontrado");
-        console.error(err);
+        setError("Pokémon not found");
       } finally {
         setLoading(false);
       }
@@ -74,7 +73,7 @@ export default function PokemonDetail() {
     return (
       <div className="fixed inset-0 flex flex-col items-center justify-center text-center gap-4 bg-background">
         <Spinner />
-        <p className="text-lg font-medium">Cargando Pokémon...</p>
+        <p className="text-lg font-medium">Loading Pokémon...</p>
       </div>
     );
   }
@@ -82,8 +81,9 @@ export default function PokemonDetail() {
   if (error || !pokemon) {
     return (
       <div className="min-h-screen w-screen p-4 flex flex-col items-center justify-center gap-4">
-        <p className="text-xl font-bold text-destructive">{error || "Pokémon no encontrado"}</p>
-        <Button onClick={() => navigate("/")}>Volver al Pokédex</Button>
+          {error || "Pokémon not found"}
+        </p>
+        <Button onClick={() => navigate("/")}>Back to Pokédex</Button>
       </div>
     );
   }
@@ -91,11 +91,13 @@ export default function PokemonDetail() {
   const primaryType = pokemon.types[0];
   const statNames = {
     hp: "HP",
-    attack: "Ataque",
-    defense: "Defensa",
-    "special-attack": "Ataque Especial",
-    "special-defense": "Defensa Especial",
-    speed: "Velocidad",
+    attack: "Attack",
+    defense: "Defense",
+    "special-attack": "Special Attack",
+    "special-defense": "Special Defense",
+    speed: "Speed",
+  };
+
   const formatRequirement = (req) => {
     switch (req.type) {
       case "level":
@@ -136,16 +138,16 @@ export default function PokemonDetail() {
           className="mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Volver al Pokédex
+          Back to Pokédex
         </Button>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Imagen y tipos */}
           <Card
             className="border-4"
             style={{ borderColor: typeColor(primaryType) }}
           >
             <CardContent className="p-6 flex flex-col items-center">
+          {/* Image + Types */}
               <img
                 src={pokemon.image}
                 alt={pokemon.name}
@@ -171,22 +173,23 @@ export default function PokemonDetail() {
             </CardContent>
           </Card>
 
-          {/* Información básica */}
           <Card className="border-4" style={{ borderColor: typeColor(primaryType) }}>
+          {/* Basic Info */}
             <CardHeader>
-              <CardTitle>Información Básica</CardTitle>
+              <CardTitle>Basic Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Altura</p>
+                <p className="text-sm text-muted-foreground">Height</p>
                 <p className="text-lg font-semibold">{pokemon.height} m</p>
               </div>
+
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Peso</p>
+                <p className="text-sm text-muted-foreground">Weight</p>
                 <p className="text-lg font-semibold">{pokemon.weight} kg</p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground mb-2">Habilidades</p>
+                <p className="text-sm text-muted-foreground mb-2">Abilities</p>
                 <div className="flex flex-wrap gap-2">
                   {pokemon.abilities.map((ability, idx) => (
                     <Badge
@@ -195,7 +198,7 @@ export default function PokemonDetail() {
                       className="capitalize"
                     >
                       {ability.name.replace("-", " ")}
-                      {ability.isHidden && " (Oculta)"}
+                      {ability.isHidden && " (Hidden)"}
                     </Badge>
                   ))}
                 </div>
@@ -203,10 +206,10 @@ export default function PokemonDetail() {
             </CardContent>
           </Card>
 
-          {/* Estadísticas */}
           <Card className="md:col-span-2 border-4" style={{ borderColor: typeColor(primaryType) }}>
+          {/* Base Stats */}
             <CardHeader>
-              <CardTitle>Estadísticas Base</CardTitle>
+              <CardTitle>Base Stats</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
@@ -233,11 +236,11 @@ export default function PokemonDetail() {
             </CardContent>
           </Card>
 
-          {/* Evoluciones */}
+          {/* Evolution Chain */}
           {pokemon.evolutions && pokemon.evolutions.length > 0 && (
             <Card className="md:col-span-2 border border-border shadow-md bg-card p-5">
               <CardHeader>
-                <CardTitle>Cadena de Evolución</CardTitle>
+                <CardTitle>Evolution Chain</CardTitle>
               </CardHeader>
 
               <CardContent>
@@ -300,7 +303,7 @@ export default function PokemonDetail() {
           {/* Moves */}
           <Card className="md:col-span-2 border border-border shadow-md bg-card p-5">
             <CardHeader>
-              <CardTitle>Movimientos</CardTitle>
+              <CardTitle>Moves</CardTitle>
             </CardHeader>
 
             <CardContent>
@@ -321,7 +324,7 @@ export default function PokemonDetail() {
 
               {pokemon.moves.length === 10 && (
                 <p className="text-sm text-muted-foreground mt-2">
-                  Mostrando primeros 10 movimientos
+                  Showing the first 10 moves.
                 </p>
               )}
             </CardContent>

@@ -1,10 +1,19 @@
+// React and routing libraries
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+
+// Third-party libraries (icons)
+import { ArrowLeft, ArrowRight } from "lucide-react";
+
+// Utils / helper functions
 import { getPokemonDetails } from "../utils/api";
 import { typeColor } from "../utils/colors";
+import { getRequirementIcon } from "../utils/requirementIcon";
+
+// UI components
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import {
   Tooltip,

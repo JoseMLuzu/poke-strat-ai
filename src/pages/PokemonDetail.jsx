@@ -71,7 +71,7 @@ export default function PokemonDetail() {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 flex flex-col items-center justify-center text-center gap-4 bg-background">
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-background text-center">
         <Spinner />
         <p className="text-lg font-medium">Loading Pokémon...</p>
       </div>
@@ -80,7 +80,8 @@ export default function PokemonDetail() {
 
   if (error || !pokemon) {
     return (
-      <div className="min-h-screen w-screen p-4 flex flex-col items-center justify-center gap-4">
+      <div className="min-h-screen flex flex-col items-center justify-center gap-6 bg-background text-center px-4">
+        <p className="text-xl font-bold text-destructive">
           {error || "Pokémon not found"}
         </p>
         <Button onClick={() => navigate("/")}>Back to Pokédex</Button>
@@ -89,6 +90,7 @@ export default function PokemonDetail() {
   }
 
   const primaryType = pokemon.types[0];
+
   const statNames = {
     hp: "HP",
     attack: "Attack",
@@ -130,40 +132,40 @@ export default function PokemonDetail() {
   };
 
   return (
-    <div className="min-h-screen w-screen p-4 bg-background">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-background py-10 px-4">
+      <div className="container mx-auto max-w-5xl space-y-8">
         <Button
           onClick={() => navigate("/")}
           variant="outline"
-          className="mb-4"
+          className="hover:bg-primary hover:text-primary-foreground"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Pokédex
         </Button>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card
-            className="border-4"
-            style={{ borderColor: typeColor(primaryType) }}
-          >
-            <CardContent className="p-6 flex flex-col items-center">
+        <div className="grid md:grid-cols-2 gap-8">
           {/* Image + Types */}
+          <Card className="border border-border shadow-md bg-card">
+            <CardContent className="p-8 flex flex-col items-center text-center">
               <img
                 src={pokemon.image}
                 alt={pokemon.name}
-                className="h-64 w-auto mb-4 object-contain"
+                className="h-64 w-auto object-contain mb-4"
               />
-              <h5 className="font-bold text-muted-foreground opacity-60 text-sm mb-2">
+
+              <span className="text-sm text-muted-foreground">
                 #{String(pokemon.number).padStart(3, "0")}
-              </h5>
-              <h1 className="text-3xl font-bold capitalize mb-4">
+              </span>
+
+              <h1 className="text-3xl font-bold capitalize mt-2 mb-4">
                 {pokemon.name}
               </h1>
+
               <div className="flex flex-wrap justify-center gap-2">
                 {pokemon.types.map((type) => (
                   <Badge
                     key={type}
-                    className="text-foreground font-semibold px-4 py-2 rounded-full text-sm"
+                    className="px-4 py-2 rounded-full font-semibold text-foreground uppercase"
                     style={{ backgroundColor: typeColor(type) }}
                   >
                     {type}
@@ -173,12 +175,13 @@ export default function PokemonDetail() {
             </CardContent>
           </Card>
 
-          <Card className="border-4" style={{ borderColor: typeColor(primaryType) }}>
           {/* Basic Info */}
+          <Card className="border border-border shadow-md bg-card p-5">
             <CardHeader>
               <CardTitle>Basic Information</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+
+            <CardContent className="space-y-5">
               <div>
                 <p className="text-sm text-muted-foreground">Height</p>
                 <p className="text-lg font-semibold">{pokemon.height} m</p>
@@ -188,6 +191,12 @@ export default function PokemonDetail() {
                 <p className="text-sm text-muted-foreground">Weight</p>
                 <p className="text-lg font-semibold">{pokemon.weight} kg</p>
               </div>
+
+              <div>
+                <p className="text-sm text-muted-foreground">Description</p>
+                <p className="text-md font-semibold">{pokemon.description}</p>
+              </div>
+
               <div>
                 <p className="text-sm text-muted-foreground mb-2">Abilities</p>
                 <div className="flex flex-wrap gap-2">
@@ -206,33 +215,33 @@ export default function PokemonDetail() {
             </CardContent>
           </Card>
 
-          <Card className="md:col-span-2 border-4" style={{ borderColor: typeColor(primaryType) }}>
           {/* Base Stats */}
+          <Card className="md:col-span-2 border border-border shadow-md bg-card p-5">
             <CardHeader>
               <CardTitle>Base Stats</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {pokemon.stats.map((stat) => (
-                  <div key={stat.name}>
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-sm font-medium capitalize">
-                        {statNames[stat.name] || stat.name}
-                      </span>
-                      <span className="text-sm font-bold">{stat.value}</span>
-                    </div>
-                    <div className="w-full bg-muted rounded-full h-2.5">
-                      <div
-                        className="h-2.5 rounded-full transition-all"
-                        style={{
-                          width: `${Math.min((stat.value / 255) * 100, 100)}%`,
-                          backgroundColor: typeColor(primaryType),
-                        }}
-                      />
-                    </div>
+
+            <CardContent className="space-y-4">
+              {pokemon.stats.map((stat) => (
+                <div key={stat.name}>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-sm font-medium">
+                      {statNames[stat.name] || stat.name}
+                    </span>
+                    <span className="text-sm font-bold">{stat.value}</span>
                   </div>
-                ))}
-              </div>
+
+                  <div className="w-full bg-muted rounded-full h-2.5">
+                    <div
+                      className="h-2.5 rounded-full transition-all"
+                      style={{
+                        width: `${Math.min((stat.value / 255) * 100, 100)}%`,
+                        backgroundColor: typeColor(primaryType),
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
             </CardContent>
           </Card>
 
@@ -323,7 +332,7 @@ export default function PokemonDetail() {
               </div>
 
               {pokemon.moves.length === 10 && (
-                <p className="text-sm text-muted-foreground mt-2">
+                <p className="text-sm text-muted-foreground mt-3">
                   Showing the first 10 moves.
                 </p>
               )}

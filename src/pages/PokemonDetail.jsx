@@ -8,6 +8,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 // Utils / helper functions
 import { getPokemonDetails } from "../utils/api";
 import { typeColor } from "../utils/colors";
+import { statNames } from "../utils/pokemonStats";
 import {
   getRequirementIcon,
   formatRequirement,
@@ -69,15 +70,6 @@ export default function PokemonDetail() {
   }
 
   const primaryType = pokemon.types[0];
-
-  const statNames = {
-    hp: "HP",
-    attack: "Attack",
-    defense: "Defense",
-    "special-attack": "Special Attack",
-    "special-defense": "Special Defense",
-    speed: "Speed",
-  };
 
   return (
     <TooltipProvider>

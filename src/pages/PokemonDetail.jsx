@@ -8,7 +8,8 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 // Utils / helper functions
 import { getPokemonDetails } from "../utils/api";
 import { typeColor } from "../utils/colors";
-import { statNames } from "../utils/pokemonStats";
+import { typeChart } from "../utils/typeChart";
+import { statNames, getCombinedWeaknesses } from "../utils/pokemonStats";
 import {
   getRequirementIcon,
   formatRequirement,
@@ -161,6 +162,65 @@ export default function PokemonDetail() {
                     ))}
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Type Weaknesses */}
+            <Card className="md:col-span-2 border border-border shadow-md bg-card p-5">
+              <CardHeader>
+                <CardTitle>Type Weaknesses</CardTitle>
+              </CardHeader>
+
+              <CardContent>
+                {pokemon?.types?.length > 0 && (
+                  <>
+                    {/* Pokemon Types */}
+                    <div className="flex flex-wrap gap-2">
+                      {pokemon.types.map((type) => (
+                        <Badge
+                          key={type}
+                          className="px-4 py-2 rounded-full font-semibold uppercase"
+                          style={{
+                            backgroundColor: typeColor(type),
+                            color:
+                              type === "electric" || type === "ice"
+                                ? "#000"
+                                : "#fff",
+                          }}
+                        >
+                          {type}
+                        </Badge>
+                      ))}
+                    </div>
+
+                    {/* Combined Weaknesses */}
+                    <div className="mt-6">
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Weak against:
+                      </p>
+
+                      <div className="flex flex-wrap gap-2">
+                        {getCombinedWeaknesses(pokemon.types).map((weak) => (
+                          <Badge
+                            key={weak}
+                            className="px-3 py-1 rounded-full font-medium"
+                            style={{
+                              backgroundColor: typeColor(weak),
+                              color:
+                                weak === "electric" ||
+                                weak === "ice" ||
+                                weak === "fairy"
+                                  ? "#000"
+                                  : "#fff",
+                            }}
+                          >
+                            {weak}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
               </CardContent>
             </Card>
 

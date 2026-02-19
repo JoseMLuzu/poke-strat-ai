@@ -1,4 +1,4 @@
-// requirementIcon.js
+// Icons for evolution requirements and formatting functions for displaying them
 import {
   ArrowUp,
   Heart,
@@ -11,6 +11,7 @@ import {
   MapPin,
 } from "lucide-react";
 
+// Returns the icon for a specific evolution requirement
 export const getRequirementIcon = (type) => {
   switch (type) {
     case "level":
@@ -34,5 +35,37 @@ export const getRequirementIcon = (type) => {
       return <MapPin className="w-3 h-3 mr-1" />;
     default:
       return null;
+  }
+};
+
+// Formats the requirement into a readable string
+export const formatRequirement = (req) => {
+  switch (req.type) {
+    case "level":
+      return `Level ${req.value}`;
+    case "friendship":
+      return "High Friendship";
+    case "affection":
+      return "High Affection";
+    case "beauty":
+      return "High Beauty";
+    case "item":
+      return `Use ${req.value}`;
+    case "held-item":
+      return `Holding ${req.value}`;
+    case "trade":
+      return "Trade";
+    case "time":
+      return req.value === "night" ? "Nighttime" : "Daytime";
+    case "gender":
+      return req.value === "female" ? "Female Only" : "Male Only";
+    case "move":
+      return `Knows ${req.value}`;
+    case "move-type":
+      return `Knows ${req.value}-type move`;
+    case "location":
+      return `At ${req.value}`;
+    default:
+      return "";
   }
 };

@@ -65,7 +65,7 @@ export default function PokemonDetail() {
         <p className="text-xl font-bold text-destructive">
           {error || "Pokémon not found"}
         </p>
-        <Button onClick={() => navigate("/")}>Back to Pokédex</Button>
+        <Button onClick={() => navigate("/pokedex")}>Back to Pokédex</Button>
       </div>
     );
   }
@@ -77,7 +77,7 @@ export default function PokemonDetail() {
       <div className="min-h-screen bg-background py-10 px-4">
         <div className="container mx-auto max-w-5xl space-y-8">
           <Button
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/pokedex")}
             variant="outline"
             className="hover:bg-primary hover:text-primary-foreground"
           >

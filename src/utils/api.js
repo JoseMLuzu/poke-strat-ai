@@ -1,5 +1,18 @@
 const BASE_URL = "https://pokeapi.co/api/v2";
 
+function formatEffectText(effectText, source = {}) {
+  if (!effectText) return "No description available.";
+
+  return effectText.replace(/\$([a-z_]+)(%)?/gi, (match, key, percentSign) => {
+    const value = source[key];
+
+    if (value === null || value === undefined) return match;
+    if (percentSign) return `${value}%`;
+
+    return String(value);
+  });
+}
+
 /* ===============================
    🔹 Get Pokémons List
 ================================= */

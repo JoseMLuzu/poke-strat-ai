@@ -10,7 +10,8 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Pokedex />} />
+        <Route path="/" element={<Navigate to="/pokedex" />} />
+        <Route path="/pokedex" element={<Pokedex />} />
         <Route path="/team" element={<TeamPage />} />
         <Route path="/pokemon/:id" element={<PokemonDetail />} />
         <Route path="/type-chart" element={<TypeChart />} />

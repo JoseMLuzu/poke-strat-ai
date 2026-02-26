@@ -149,9 +149,37 @@ export async function getPokemonDetails(idOrName) {
         const res = await fetch(m.move.url);
         const moveData = await res.json();
 
+        const englishEffect = moveData.effect_entries?.find(
+          (entry) => entry.language.name === "en",
+        );
+
         return {
           name: m.move.name,
           type: moveData.type.name,
+          description: formatEffectText(
+            englishEffect?.short_effect || englishEffect?.effect,
+            moveData,
+          ),
+        };
+      }),
+    );
+
+    const abilities = await Promise.all(
+      details.abilities.map(async (ability) => {
+        const res = await fetch(ability.ability.url);
+        const abilityData = await res.json();
+
+        const englishEntry = abilityData.effect_entries?.find(
+          (entry) => entry.language.name === "en",
+        );
+
+        return {
+          name: ability.ability.name,
+          isHidden: ability.is_hidden,
+          description:
+            englishEntry?.short_effect ||
+            englishEntry?.effect ||
+            "No description available.",
         };
       }),
     );
@@ -222,11 +250,8 @@ export async function getPokemonDetails(idOrName) {
         name: stat.stat.name,
         value: stat.base_stat,
       })),
-      abilities: details.abilities.map((ability) => ({
-        name: ability.ability.name,
-        isHidden: ability.is_hidden,
-      })),
-      moves, // ✅ ahora es [{ name, type }]
+      abilities,
+      moves,
       evolutions,
     };
   } catch (error) {

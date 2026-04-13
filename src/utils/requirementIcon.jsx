@@ -9,6 +9,7 @@ import {
   User,
   Sword,
   MapPin,
+  Stone,
 } from "lucide-react";
 
 // Returns the icon for a specific evolution requirement
@@ -33,6 +34,9 @@ export const getRequirementIcon = (type) => {
       return <Sword className="w-3 h-3 mr-1" />;
     case "location":
       return <MapPin className="w-3 h-3 mr-1" />;
+    case "item":
+      return <Stone className="w-3 h-3 mr-1" />;
+
     default:
       return null;
   }
@@ -65,6 +69,9 @@ export const formatRequirement = (req) => {
       return `Knows ${req.value}-type move`;
     case "location":
       return `At ${req.value}`;
+    case "stone":
+      return `Use ${req.value}`;
+
     default:
       return "";
   }

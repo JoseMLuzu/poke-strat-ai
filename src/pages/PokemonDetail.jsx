@@ -8,8 +8,11 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 // Utils / helper functions
 import { getPokemonDetails } from "../utils/api";
 import { typeColor } from "../utils/colors";
-import { typeChart } from "../utils/typeChart";
-import { statNames, getCombinedWeaknesses } from "../utils/pokemonStats";
+import {
+  statNames,
+  getCombinedWeaknesses,
+  getCombinedStrengths,
+} from "../utils/pokemonStats";
 import {
   getRequirementIcon,
   formatRequirement,
@@ -167,59 +170,66 @@ export default function PokemonDetail() {
 
             {/* Type Weaknesses */}
             <Card className="md:col-span-2 border border-border shadow-md bg-card p-5">
-              <CardHeader>
-                <CardTitle>Type Weaknesses</CardTitle>
-              </CardHeader>
-
               <CardContent>
                 {pokemon?.types?.length > 0 && (
-                  <>
-                    {/* Pokemon Types */}
-                    <div className="flex flex-wrap gap-2">
-                      {pokemon.types.map((type) => (
-                        <Badge
-                          key={type}
-                          className="px-4 py-2 rounded-full font-semibold uppercase"
-                          style={{
-                            backgroundColor: typeColor(type),
-                            color:
-                              type === "electric" || type === "ice"
-                                ? "#000"
-                                : "#fff",
-                          }}
-                        >
-                          {type}
-                        </Badge>
-                      ))}
-                    </div>
+                  <div className="grid gap-8 lg:grid-cols-2 items-center">
+                    {/* Right side - Weaknesses + Counters stacked */}
+                    <div className="space-y-6">
+                      <div>
+                        <p className="mb-3 text-base font-semibold tracking-wide text-foreground">
+                          Weak against
+                        </p>
 
-                    {/* Combined Weaknesses */}
-                    <div className="mt-6">
-                      <p className="text-sm text-muted-foreground mb-2">
-                        Weak against:
-                      </p>
+                        <div className="flex flex-wrap gap-2">
+                          {getCombinedWeaknesses(pokemon.types).map((weak) => (
+                            <Badge
+                              key={weak}
+                              className="px-4 py-2 rounded-full text-s font-semibold uppercase"
+                              style={{
+                                backgroundColor: typeColor(weak),
+                                color:
+                                  weak === "electric" ||
+                                  weak === "ice" ||
+                                  weak === "fairy"
+                                    ? "#000"
+                                    : "#fff",
+                              }}
+                            >
+                              {weak}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
 
-                      <div className="flex flex-wrap gap-2">
-                        {getCombinedWeaknesses(pokemon.types).map((weak) => (
-                          <Badge
-                            key={weak}
-                            className="px-3 py-1 rounded-full font-medium"
-                            style={{
-                              backgroundColor: typeColor(weak),
-                              color:
-                                weak === "electric" ||
-                                weak === "ice" ||
-                                weak === "fairy"
-                                  ? "#000"
-                                  : "#fff",
-                            }}
-                          >
-                            {weak}
-                          </Badge>
-                        ))}
+                      <div>
+                        <p className="mb-3 text-base font-semibold tracking-wide text-foreground">
+                          Strong against
+                        </p>
+
+                        <div className="flex flex-wrap gap-2">
+                          {getCombinedStrengths(pokemon.types).map(
+                            (strength) => (
+                              <Badge
+                                key={strength}
+                                className="px-4 py-2 rounded-full text-s font-semibold uppercase"
+                                style={{
+                                  backgroundColor: typeColor(strength),
+                                  color:
+                                    strength === "electric" ||
+                                    strength === "ice" ||
+                                    strength === "fairy"
+                                      ? "#000"
+                                      : "#fff",
+                                }}
+                              >
+                                {strength}
+                              </Badge>
+                            ),
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </>
+                  </div>
                 )}
               </CardContent>
             </Card>

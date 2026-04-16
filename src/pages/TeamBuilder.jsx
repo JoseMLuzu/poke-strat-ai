@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Plus } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { Plus, X, Search } from "lucide-react";
 import { getPokemons } from "@/utils/api.js";
 
 export default function TeamBuilder() {
@@ -7,12 +7,12 @@ export default function TeamBuilder() {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [pokemons, setPokemons] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchPokemons = async () => {
       try {
         const data = await getPokemons();
-        setPokemons(data);
       } catch (error) {
         console.error("Error fetching pokemons:", error);
       } finally {
@@ -23,11 +23,19 @@ export default function TeamBuilder() {
     fetchPokemons();
   }, []);
 
+  const filteredPokemons = useMemo(() => {
+    return pokemons.filter((pokemon) =>
+      pokemon.name.toLowerCase().includes(search.toLowerCase()),
+    );
+  }, [pokemons, search]);
+
   const addPokemonToSlot = (pokemon, index) => {
     const newTeam = [...team];
     newTeam[index] = pokemon;
     setTeam(newTeam);
     setSelectedSlot(null);
+    setSearch("");
+  };
   };
 
   return (
@@ -73,11 +81,21 @@ export default function TeamBuilder() {
                   key={pokemon.id}
                   onClick={() => addPokemonToSlot(pokemon, selectedSlot)}
                   className="cursor-pointer hover:scale-105 transition"
+                <Search className="w-4 h-4 text-muted-foreground" />
+                <input
+                  type="text"
+                  placeholder={`Search Pokémon for slot ${selectedSlot + 1}...`}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  autoFocus
+                  className="w-full bg-transparent outline-none text-sm"
+                />
                 >
                   <img src={pokemon.image} alt={pokemon.name} />
                   <p className="text-center text-sm capitalize">
                     {pokemon.name}
                   </p>
+                  {filteredPokemons.map((pokemon) => (
                 </div>
               ))}
             </div>

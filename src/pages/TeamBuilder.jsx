@@ -48,35 +48,38 @@ export default function TeamBuilder() {
 
   return (
     <div className="min-h-screen p-6">
-      <h1 className="text-2xl font-bold text-center mb-6">Build Your Team</h1>
+      <h1 className="text-3xl font-bold text-center mb-8">Build Your Team</h1>
 
       {/* Team Grid */}
-      <div className="grid grid-cols-3 gap-6 max-w-4xl mx-auto">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
         {team.map((slot, index) => (
           <div
             key={index}
             onClick={() => setSelectedSlot(index)}
-            className="h-48 rounded-xl border-2 border-border bg-background flex items-center justify-center cursor-pointer hover:border-primary transition"
+            className="relative h-48 rounded-2xl border-2 border-muted-foreground bg-background shadow-sm flex items-center justify-center cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-105 hover:border-primary"
           >
             {slot ? (
-              <div className="text-center">
-                <img
-                  src={slot.image}
-                  alt={slot.name}
-                  className="h-20 mx-auto"
-                />
-                <p className="capitalize mt-2">{slot.name}</p>
-              </div>
+              <>
                 <button
                   onClick={(e) => removePokemonFromSlot(index, e)}
                   className="absolute top-2 right-2 p-1 rounded-full bg-muted hover:bg-destructive hover:text-white transition"
                 >
                   <X className="w-4 h-4" />
                 </button>
+
+                <div className="text-center">
+                  <img
+                    src={slot.image}
+                    alt={slot.name}
+                    className="h-24 mx-auto drop-shadow-md"
+                  />
+                  <p className="capitalize mt-2 font-medium">{slot.name}</p>
+                </div>
+              </>
             ) : (
               <div className="flex flex-col items-center text-muted-foreground">
-                <Plus className="w-8 h-8" />
-                <p>Add Pokémon</p>
+                <Plus className="w-10 h-10 mb-2" />
+                <p className="font-medium">Add Pokémon</p>
               </div>
             )}
           </div>

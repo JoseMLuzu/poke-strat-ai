@@ -2,8 +2,20 @@ import { useState, useEffect, useMemo } from "react";
 import { Plus, X, Search } from "lucide-react";
 import { getPokemons } from "@/utils/api.js";
 
+const TEAM_KEY = "pokemon-team";
+
 export default function TeamBuilder() {
-  const [team, setTeam] = useState(Array(6).fill(null));
+  // Load team from localStorage
+  const [team, setTeam] = useState(() => {
+    try {
+      const saved = localStorage.getItem(TEAM_KEY);
+      return saved ? JSON.parse(saved) : Array(6).fill(null);
+    } catch (err) {
+      console.error("Error loading team from localStorage:", err);
+      return Array(6).fill(null);
+    }
+  });
+
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [pokemons, setPokemons] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,6 +36,15 @@ export default function TeamBuilder() {
 
     fetchPokemons();
   }, []);
+
+  // Save team to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(TEAM_KEY, JSON.stringify(team));
+    } catch (err) {
+      console.error("Error saving team to localStorage:", err);
+    }
+  }, [team]);
 
   const filteredPokemons = useMemo(() => {
     return pokemons.filter((pokemon) =>

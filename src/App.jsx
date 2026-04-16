@@ -3,6 +3,7 @@ import Pokedex from "./pages/Pokedex";
 import TeamPage from "./pages/TeamPage";
 import PokemonDetail from "./pages/PokemonDetail";
 import TypeChart from "./pages/TypeChart";
+import TeamBuilder from "./pages/TeamBuilder";
 import Navbar from "./components/Navbar";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <Route path="/pokedex" element={<Pokedex />} />
         <Route path="/team" element={<TeamPage />} />
         <Route path="/pokemon/:id" element={<PokemonDetail />} />
+        <Route path="/team-builder" element={<TeamBuilder />} />
         <Route path="/type-chart" element={<TypeChart />} />
       </Routes>
     </Router>

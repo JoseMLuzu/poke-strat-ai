@@ -36,6 +36,12 @@ export default function TeamBuilder() {
     setSelectedSlot(null);
     setSearch("");
   };
+
+  const removePokemonFromSlot = (index, e) => {
+    e.stopPropagation();
+    const newTeam = [...team];
+    newTeam[index] = null;
+    setTeam(newTeam);
   };
 
   return (
@@ -59,6 +65,12 @@ export default function TeamBuilder() {
                 />
                 <p className="capitalize mt-2">{slot.name}</p>
               </div>
+                <button
+                  onClick={(e) => removePokemonFromSlot(index, e)}
+                  className="absolute top-2 right-2 p-1 rounded-full bg-muted hover:bg-destructive hover:text-white transition"
+                >
+                  <X className="w-4 h-4" />
+                </button>
             ) : (
               <div className="flex flex-col items-center text-muted-foreground">
                 <Plus className="w-8 h-8" />

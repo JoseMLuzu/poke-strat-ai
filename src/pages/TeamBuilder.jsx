@@ -13,8 +13,10 @@ export default function TeamBuilder() {
     const fetchPokemons = async () => {
       try {
         const data = await getPokemons();
+        setPokemons(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Error fetching pokemons:", error);
+        setPokemons([]);
       } finally {
         setLoading(false);
       }

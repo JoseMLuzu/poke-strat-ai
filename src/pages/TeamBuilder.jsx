@@ -2,6 +2,9 @@ import { useState, useEffect, useMemo } from "react";
 import { Plus, X, Search } from "lucide-react";
 import { getPokemons } from "@/utils/api.js";
 
+import { TypeBadge } from "@/components/TypeBadge";
+import { allTypes, typeEffectiveness } from "@/lib/pokemon-types";
+
 const TEAM_KEY = "pokemon-team";
 
 export default function TeamBuilder() {

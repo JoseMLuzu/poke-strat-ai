@@ -49,6 +49,22 @@ export default function TeamBuilder() {
     }
   }, [team]);
 
+  /* ---------------- HELPERS ---------------- */
+  const getPokemonTypes = (pokemon) => {
+    if (!pokemon) return [];
+    return pokemon.types || (pokemon.type ? [pokemon.type] : []);
+  };
+
+  const getRoleWeight = (pokemon) => {
+    const s = pokemon?.stats;
+    if (!s) return 1;
+
+    const avg = (s.hp + s.defense + s.specialDefense) / 3;
+
+    if (avg >= 80) return 1.5; // tank
+    if (avg >= 60) return 1.2; // bulky
+    return 1; // glass cannon
+  };
   const filteredPokemons = useMemo(() => {
     return pokemons.filter((pokemon) =>
       pokemon.name.toLowerCase().includes(search.toLowerCase()),

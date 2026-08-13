@@ -151,23 +151,45 @@ export default function TeamBuilder() {
     setTeam(newTeam);
   };
 
+  /* ---------------- UI ---------------- */
   return (
-    <div className="min-h-screen p-6">
-      <h1 className="text-3xl font-bold text-center mb-8">Build Your Team</h1>
+    <div className="min-h-screen p-6 bg-gradient-to-b from-background via-background to-muted/10">
+      {/* HEADER */}
+      <h1 className="text-3xl font-bold text-center mb-10 tracking-tight">
+        Pokémon Team Builder
+      </h1>
 
-      {/* Team Grid */}
+      {/* TEAM GRID */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
         {team.map((slot, index) => (
           <div
             key={index}
             onClick={() => setSelectedSlot(index)}
-            className="relative h-48 rounded-2xl border-2 border-muted-foreground bg-background shadow-sm flex items-center justify-center cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-105 hover:border-primary"
+            className="
+              relative h-52
+              rounded-3xl
+              border border-border/40
+              bg-card/60 backdrop-blur-xl
+              shadow-md
+              flex items-center justify-center
+              cursor-pointer
+              transition-all duration-300
+              hover:-translate-y-1 hover:shadow-xl hover:border-primary/40
+              active:scale-[0.98]
+            "
           >
             {slot ? (
               <>
                 <button
                   onClick={(e) => removePokemonFromSlot(index, e)}
-                  className="absolute top-2 right-2 p-1 rounded-full bg-muted hover:bg-destructive hover:text-white transition"
+                  className="
+                    absolute top-3 right-3
+                    p-1.5 rounded-full
+                    bg-background/60
+                    border border-border/30
+                    hover:bg-red-500 hover:text-white
+                    transition
+                  "
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -175,16 +197,17 @@ export default function TeamBuilder() {
                 <div className="text-center">
                   <img
                     src={slot.image}
-                    alt={slot.name}
-                    className="h-24 mx-auto drop-shadow-md"
+                    className="h-24 mx-auto drop-shadow-lg hover:scale-110 transition"
                   />
-                  <p className="capitalize mt-2 font-medium">{slot.name}</p>
+                  <p className="capitalize mt-2 text-sm font-medium">
+                    {slot.name}
+                  </p>
                 </div>
               </>
             ) : (
-              <div className="flex flex-col items-center text-muted-foreground">
-                <Plus className="w-10 h-10 mb-2" />
-                <p className="font-medium">Add Pokémon</p>
+              <div className="text-muted-foreground flex flex-col items-center">
+                <Plus className="w-8 h-8 mb-1" />
+                <p>Add Pokémon</p>
               </div>
             )}
           </div>

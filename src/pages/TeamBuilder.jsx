@@ -319,63 +319,75 @@ export default function TeamBuilder() {
       {/* MODAL */}
       {selectedSlot !== null && (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-sm pt-24 px-4"
+          className="
+            fixed inset-0 z-50
+            flex items-center justify-center
+            bg-black/40 backdrop-blur-md
+            px-4
+          "
           onClick={() => setSelectedSlot(null)}
         >
           <div
+            className="
+              w-full max-w-3xl
+              rounded-3xl
+              border border-border/40
+              bg-card/80 backdrop-blur-2xl
+              shadow-2xl
+              overflow-hidden
+            "
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-3xl rounded-3xl border border-white/10 bg-background/95 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200"
           >
-            {/* Search Header */}
-            <div className="sticky top-0 border-b bg-background/90 backdrop-blur-md p-4">
-              <div className="flex items-center gap-3 rounded-2xl border px-4 py-3 shadow-sm">
+            {/* SEARCH */}
+            <div className="p-4 border-b border-border/30">
+              <div
+                className="
+                flex items-center gap-3
+                rounded-2xl
+                border border-border/40
+                bg-background/40
+                px-4 py-3
+              "
+              >
                 <Search className="w-4 h-4 text-muted-foreground" />
                 <input
-                  type="text"
-                  placeholder={`Search Pokémon for slot ${selectedSlot + 1}...`}
+                  className="w-full bg-transparent outline-none text-sm"
+                  placeholder={`Search Pokémon for slot ${selectedSlot + 1}`}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  autoFocus
-                  className="w-full bg-transparent outline-none text-sm"
                 />
-                <button
-                  onClick={() => setSelectedSlot(null)}
-                  className="rounded-lg p-1 hover:bg-muted transition"
-                >
+                <button onClick={() => setSelectedSlot(null)}>
                   <X className="w-4 h-4" />
                 </button>
               </div>
             </div>
 
-            {/* Results */}
-            <div className="max-h-[500px] overflow-y-auto p-4">
+            {/* LIST */}
+            <div className="p-4 max-h-[450px] overflow-y-auto grid grid-cols-3 gap-3">
               {loading ? (
-                <p className="text-center text-sm text-muted-foreground py-10">
-                  Loading Pokémon...
-                </p>
-              ) : filteredPokemons.length === 0 ? (
-                <p className="text-center text-sm text-muted-foreground py-10">
-                  No Pokémon found
-                </p>
+                <p className="text-sm text-muted-foreground">Loading...</p>
               ) : (
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-                  {filteredPokemons.map((pokemon) => (
-                    <button
-                      key={pokemon.id}
-                      onClick={() => addPokemonToSlot(pokemon, selectedSlot)}
-                      className="group rounded-2xl border p-3 hover:border-primary hover:shadow-md hover:-translate-y-1 transition-all duration-200"
-                    >
-                      <img
-                        src={pokemon.image}
-                        alt={pokemon.name}
-                        className="h-16 mx-auto transition-transform duration-200 group-hover:scale-110"
-                      />
-                      <p className="mt-2 text-xs capitalize text-center font-medium">
-                        {pokemon.name}
-                      </p>
-                    </button>
-                  ))}
-                </div>
+                filteredPokemons.map((p) => (
+                  <button
+                    key={p.id}
+                    onClick={() => addPokemonToSlot(p, selectedSlot)}
+                    className="
+                      group
+                      rounded-2xl
+                      border border-border/30
+                      bg-background/40 backdrop-blur-md
+                      p-3
+                      hover:-translate-y-1 hover:shadow-lg hover:border-primary/30
+                      transition
+                    "
+                  >
+                    <img
+                      src={p.image}
+                      className="h-16 mx-auto group-hover:scale-110 transition"
+                    />
+                    <p className="text-xs mt-2 capitalize">{p.name}</p>
+                  </button>
+                ))
               )}
             </div>
           </div>

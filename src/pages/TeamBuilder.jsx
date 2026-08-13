@@ -8,13 +8,12 @@ import { allTypes, typeEffectiveness } from "@/lib/pokemon-types";
 const TEAM_KEY = "pokemon-team";
 
 export default function TeamBuilder() {
-  // Load team from localStorage
+  /* ---------------- STATE ---------------- */
   const [team, setTeam] = useState(() => {
     try {
       const saved = localStorage.getItem(TEAM_KEY);
       return saved ? JSON.parse(saved) : Array(6).fill(null);
-    } catch (err) {
-      console.error("Error loading team from localStorage:", err);
+    } catch {
       return Array(6).fill(null);
     }
   });
@@ -24,13 +23,13 @@ export default function TeamBuilder() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
+  /* ---------------- FETCH ---------------- */
   useEffect(() => {
     const fetchPokemons = async () => {
       try {
         const data = await getPokemons();
         setPokemons(Array.isArray(data) ? data : []);
-      } catch (error) {
-        console.error("Error fetching pokemons:", error);
+      } catch {
         setPokemons([]);
       } finally {
         setLoading(false);
@@ -40,13 +39,9 @@ export default function TeamBuilder() {
     fetchPokemons();
   }, []);
 
-  // Save team to localStorage whenever it changes
+  /* ---------------- SAVE ---------------- */
   useEffect(() => {
-    try {
-      localStorage.setItem(TEAM_KEY, JSON.stringify(team));
-    } catch (err) {
-      console.error("Error saving team to localStorage:", err);
-    }
+    localStorage.setItem(TEAM_KEY, JSON.stringify(team));
   }, [team]);
 
   /* ---------------- HELPERS ---------------- */
@@ -65,9 +60,11 @@ export default function TeamBuilder() {
     if (avg >= 60) return 1.2; // bulky
     return 1; // glass cannon
   };
+
+  /* ---------------- FILTER ---------------- */
   const filteredPokemons = useMemo(() => {
-    return pokemons.filter((pokemon) =>
-      pokemon.name.toLowerCase().includes(search.toLowerCase()),
+    return pokemons.filter((p) =>
+      p.name.toLowerCase().includes(search.toLowerCase()),
     );
   }, [pokemons, search]);
 

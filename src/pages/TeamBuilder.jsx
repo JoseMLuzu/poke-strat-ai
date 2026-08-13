@@ -68,6 +68,74 @@ export default function TeamBuilder() {
     );
   }, [pokemons, search]);
 
+  /* ---------------- WEAKNESS MAPS ---------------- */
+  const { threatScore, teamWeaknessMap, teamResistanceMap, topWeakPoints } =
+    useMemo(() => {
+      const weakness = {};
+      const resist = {};
+      const immune = {};
+      const map = {};
+
+      allTypes.forEach((t) => {
+        weakness[t] = 0;
+        resist[t] = 0;
+        immune[t] = 0;
+        map[t] = 0;
+      });
+
+      team.forEach((pokemon) => {
+        if (!pokemon) return;
+
+        const weight = getRoleWeight(pokemon);
+        const types = getPokemonTypes(pokemon);
+
+        allTypes.forEach((atkType) => {
+          // 👈 tipo que ataca
+          let multiplier = 1;
+
+          types.forEach((defType) => {
+            // 👈 tipos de tu Pokémon
+            multiplier *= typeEffectiveness[atkType][defType];
+          });
+
+          if (multiplier === 0) {
+            immune[atkType] += weight;
+          } else if (multiplier > 1) {
+            weakness[atkType] += weight * multiplier;
+            map[atkType] += weight * multiplier;
+          } else if (multiplier < 1) {
+            resist[atkType] += weight * (1 - multiplier);
+          }
+        });
+      });
+
+      let score = 0;
+
+      allTypes.forEach((t) => {
+        const w = weakness[t];
+        const r = resist[t];
+        const i = immune[t];
+
+        score += w * 2;
+        score += Math.max(0, w - 1) * 1.5;
+        score -= r * 1;
+        score -= i * 2;
+      });
+
+      const top = Object.entries(map)
+        .filter(([, v]) => v > 0)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+
+      return {
+        threatScore: Math.round(score),
+        teamWeaknessMap: weakness,
+        teamResistanceMap: resist,
+        topWeakPoints: top,
+      };
+    }, [team]);
+
+  /* ---------------- ACTIONS ---------------- */
   const addPokemonToSlot = (pokemon, index) => {
     const newTeam = [...team];
     newTeam[index] = pokemon;
@@ -123,7 +191,109 @@ export default function TeamBuilder() {
         ))}
       </div>
 
-      {/* Minimal Dynamic Modal */}
+      {/* ANALYTICS */}
+      <div
+        className="
+        max-w-4xl mx-auto mt-12 p-6
+        rounded-3xl
+        border border-border/40
+        bg-card/70 backdrop-blur-xl
+        shadow-xl
+      "
+      >
+        <h2 className="text-xl font-semibold mb-6">Team Analytics</h2>
+
+        {/* SCORE */}
+        <div
+          className="
+          mb-8 p-4
+          rounded-2xl
+          bg-muted/20
+          border border-border/30
+        "
+        >
+          <p className="text-sm text-muted-foreground">Weakness Score</p>
+          <p className="text-3xl font-bold">{threatScore}</p>
+        </div>
+
+        {/* GRID */}
+        <div className="grid md:grid-cols-3 gap-6">
+          {/* WEAKNESSES */}
+          <div>
+            <h3 className="text-sm font-semibold text-red-400 mb-3">
+              Weaknesses
+            </h3>
+
+            <div className="flex flex-wrap gap-2">
+              {allTypes
+                .filter((t) => teamWeaknessMap[t] > 0)
+                .sort((a, b) => teamWeaknessMap[b] - teamWeaknessMap[a])
+                .map((t) => (
+                  <div key={t} className="chip">
+                    <TypeBadge type={t} size="sm" />
+                    <span className="text-xs">{teamWeaknessMap[t]}x</span>
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          {/* RESISTANCES */}
+          <div>
+            <h3 className="text-sm font-semibold text-emerald-400 mb-3">
+              Resistances
+            </h3>
+
+            <div className="flex flex-wrap gap-2">
+              {allTypes
+                .filter((t) => teamResistanceMap[t] > 0)
+                .sort((a, b) => teamResistanceMap[b] - teamResistanceMap[a])
+                .map((t) => (
+                  <div key={t} className="chip">
+                    <TypeBadge type={t} size="sm" />
+                    <span className="text-xs">{teamResistanceMap[t]}x</span>
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          {/* TOP THREATS */}
+          <div>
+            <h3 className="text-sm font-semibold text-yellow-400 mb-3">
+              Top Threats
+            </h3>
+
+            <div className="space-y-2">
+              {topWeakPoints.length === 0 ? (
+                <p className="text-xs text-muted-foreground">
+                  No major threats
+                </p>
+              ) : (
+                topWeakPoints.map(([type, value]) => (
+                  <div
+                    key={type}
+                    className="
+                      flex items-center justify-between
+                      p-2 rounded-xl
+                      border border-border/30
+                      bg-background/30
+                    "
+                  >
+                    <div className="flex items-center gap-2">
+                      <TypeBadge type={type} size="sm" />
+                      <span className="text-xs">{type}</span>
+                    </div>
+                    <span className="text-xs font-bold">
+                      {Math.round(value)}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* MODAL */}
       {selectedSlot !== null && (
         <div
           className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-sm pt-24 px-4"
@@ -188,6 +358,19 @@ export default function TeamBuilder() {
           </div>
         </div>
       )}
+
+      {/* CHIP STYLE */}
+      <style>{`
+        .chip {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 4px 8px;
+          border-radius: 12px;
+          border: 1px solid rgba(255,255,255,0.08);
+          background: rgba(255,255,255,0.03);
+        }
+      `}</style>
     </div>
   );
 }
